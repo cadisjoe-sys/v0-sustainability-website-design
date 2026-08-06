@@ -35,7 +35,7 @@ const newsItems = [
     date: "08 June 2025",
     title: "Every Decision is a Climate Decision",
     description:
-      "Climate Leader Katherine Hayhoe shares insights on how every business decision impacts our climate future and why sustainability matters now more than ever.",
+      "Climate Leader Katharine Hayhoe shares insights on how every business decision impacts our climate future and why sustainability matters now more than ever.",
     link: "https://www.reblueventures.com/blog/interview-with-katharine-hayhoe",
     tags: ["Podcasts", "Climate Action", "Leadership"],
     image: "/climate-leader-speaking-sustainability-conference.jpg",
