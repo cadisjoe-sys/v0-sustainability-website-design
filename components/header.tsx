@@ -1,8 +1,8 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
+import { Logo } from "@/components/logo"
 import { cn } from "@/lib/utils"
 import { STYLE_M } from "@/lib/style-m"
 
@@ -132,31 +132,8 @@ export function Header() {
             </>
           )}
 
-          <Link href="/" className="flex-shrink-0 relative z-10" aria-label="Smoothsailing Sustainability Home">
-            <div className="flex flex-col leading-none">
-              <span
-                className={cn(
-                  "text-lg font-medium lg:text-xl leading-5",
-                  hasScrolled
-                    ? "text-deep-ocean transition-colors duration-500"
-                    : "text-white transition-colors duration-700",
-                )}
-                style={{ fontFamily: "var(--font-geom), Geneva, sans-serif" }}
-              >
-                Smoothsailing
-              </span>
-              <span
-                className={cn(
-                  "leading-3 lg:text-sm font-normal",
-                  hasScrolled
-                    ? "text-deep-ocean/70 transition-colors duration-300 delay-100"
-                    : "text-white/70 transition-colors duration-500",
-                )}
-                style={{ fontFamily: "var(--font-geom), Geneva, sans-serif" }}
-              >
-                Sustainability
-              </span>
-            </div>
+          <Link href="/" className="relative z-10 shrink-0" aria-label="Smoothsailing Sustainability Home">
+            <Logo size="compact" variant={hasScrolled ? "teal" : "white"} priority />
           </Link>
 
           <div className="hidden lg:flex items-center gap-0 relative z-10">
@@ -456,7 +433,11 @@ export function Header() {
         </div>
       </header>
 
-      <div className={cn("fixed inset-0 z-40 md:hidden", menuOpen ? "pointer-events-auto" : "pointer-events-none")}>
+      <div
+        className={cn("fixed inset-0 z-40 md:hidden", menuOpen ? "pointer-events-auto" : "pointer-events-none")}
+        aria-hidden={!menuOpen}
+        inert={!menuOpen}
+      >
         <div
           className="absolute inset-0 bg-deep-ocean/95 backdrop-blur-md"
           style={{
@@ -475,20 +456,7 @@ export function Header() {
           }}
         >
           <div className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 border-b border-white/10 bg-deep-ocean/95 backdrop-blur-sm">
-            <div className="flex flex-col leading-none">
-              <span
-                className="text-lg font-medium text-white"
-                style={{ fontFamily: "var(--font-geom), Geneva, sans-serif" }}
-              >
-                Smoothsailing
-              </span>
-              <span
-                className="text-[10px] font-medium text-white/70"
-                style={{ fontFamily: "var(--font-geom), Geneva, sans-serif" }}
-              >
-                Sustainability
-              </span>
-            </div>
+            <Logo size="compact" variant="white" />
 
             <button
               className="w-10 h-10 flex items-center justify-center text-white hover:bg-white/10 rounded-full transition-all duration-300 active:scale-95"

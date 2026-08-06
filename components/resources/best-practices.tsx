@@ -7,7 +7,20 @@ interface BestPracticesProps {
   onTagClick?: (tag: string) => void
 }
 
-const categories = [
+interface PracticeItem {
+  title: string
+  description: string
+  link?: string
+  source?: string
+  tags: string[]
+}
+
+interface PracticeCategory {
+  title: string
+  items: PracticeItem[]
+}
+
+const categories: PracticeCategory[] = [
   {
     title: "Sustainability as a Business Driver",
     items: [

@@ -4,7 +4,7 @@ import type React from "react"
 
 
 import Link from "next/link"
-import Image from "next/image"
+import { Logo } from "@/components/logo"
 
 const footerLinks = {
   company: {
@@ -105,29 +105,7 @@ export function Footer() {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end">
-          <div className="flex items-end gap-6">
-            <Image
-              src="/images/ss-logo-sailboat.png"
-              alt="Smoothsailing Sustainability Logo"
-              width={200}
-              height={300}
-              className="h-48 lg:h-64 w-auto object-contain"
-            />
-            <div className="flex flex-col">
-              <span
-                className="text-4xl lg:text-5xl xl:text-6xl text-seafoam tracking-tight transition-colors"
-                style={{ fontFamily: "var(--font-geom), Geneva, sans-serif", fontWeight: 400 }}
-              >
-                Smoothsailing
-              </span>
-              <span
-                className="text-2xl lg:text-3xl xl:text-4xl text-seafoam/70 tracking-tight mt-1 transition-colors"
-                style={{ fontFamily: "var(--font-geom), Geneva, sans-serif", fontWeight: 400 }}
-              >
-                Sustainability
-              </span>
-            </div>
-          </div>
+          <Logo size="large" variant="white" />
 
           <div className="space-y-4 text-seafoam/50">
             <p className="text-sm">

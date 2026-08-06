@@ -118,7 +118,7 @@ export function IntroSection() {
                     challenges as you chart your sustainability course. Our services can be adapted to companies of
                     every shape and size, from start-ups to Fortune 100 organizations.
                   </p>
-                  <OrganicButton href={config.servicesButton.href} variant="secondary" size="md">
+                  <OrganicButton href={config.servicesButton.href} variant="secondary" size="default">
                     {config.servicesButton.text}
                   </OrganicButton>
                 </div>

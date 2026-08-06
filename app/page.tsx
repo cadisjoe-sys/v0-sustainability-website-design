@@ -7,6 +7,7 @@ import { PinaultQuote } from "@/components/home/pinault-quote"
 import { ServicesPreview } from "@/components/home/services-preview"
 import { FundamentalsSection } from "@/components/home/fundamentals-section"
 import { ResourceHubPreview } from "@/components/home/resource-hub-preview"
+import { ServiceFinder } from "@/components/services/service-finder"
 
 export default function HomePage() {
   return (
@@ -17,9 +18,11 @@ export default function HomePage() {
         <HeroSection />
         {/* 2. About section with large headline */}
         <IntroSection />
-        {/* 3. The Case for Sustainability */}
+        {/* 3. Choose a course based on current business needs */}
+        <ServiceFinder />
+        {/* 4. The Case for Sustainability */}
         <QuoteSection />
-        {/* 4. Services preview */}
+        {/* 5. Services preview */}
         <ServicesPreview />
         <PinaultQuote />
         {/* 5. How we work / Our Approach */}

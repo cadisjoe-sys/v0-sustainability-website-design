@@ -197,7 +197,7 @@ export function ServicesPreview() {
                         {service.description}
                       </p>
                       <Link
-                        href={service.href}
+                        href={service.href ?? "/services"}
                         className="inline-flex items-center gap-2 text-ocean tracking-wider hover:text-deep-ocean transition-colors group/link"
                         style={{ fontFamily: "var(--font-geom), Geneva, sans-serif" }}
                       >
