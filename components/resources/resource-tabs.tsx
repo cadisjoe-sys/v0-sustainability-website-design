@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react"
 import { Search, X } from "lucide-react"
-import { BestPractices } from "./best-practices"
-import { CaseStudies } from "./case-studies"
-import { Glossary } from "./glossary"
-import { NewsSection } from "./news-section"
+import { BestPractices, getBestPracticesResultCount } from "./best-practices"
+import { CaseStudies, getCaseStudiesResultCount } from "./case-studies"
+import { Glossary, getGlossaryResultCount } from "./glossary"
+import { NewsSection, getNewsResultCount } from "./news-section"
 
 type TabComponent = React.ComponentType<{
   searchQuery?: string
   activeFilters?: string[]
   onTagClick?: (tag: string) => void
+  onClearFilters?: () => void
 }>
 
 const tabs: { id: string; label: string; component: TabComponent }[] = [
@@ -68,6 +69,13 @@ const filterGroups = [
 
 const validTabIds = tabs.map((tab) => tab.id)
 
+const resultCountByTab: Record<string, (searchQuery: string, activeFilters: string[]) => number> = {
+  news: getNewsResultCount,
+  "case-studies": getCaseStudiesResultCount,
+  "best-practices": getBestPracticesResultCount,
+  glossary: getGlossaryResultCount,
+}
+
 export function ResourceTabs() {
   const [activeTab, setActiveTab] = useState("news")
   const [searchQuery, setSearchQuery] = useState("")
@@ -84,7 +92,9 @@ export function ResourceTabs() {
     return () => window.removeEventListener("hashchange", applyHash)
   }, [])
 
-  const ActiveComponent = tabs.find((tab) => tab.id === activeTab)?.component ?? NewsSection
+  const activeTabConfig = tabs.find((tab) => tab.id === activeTab) ?? tabs[0]
+  const ActiveComponent = activeTabConfig.component
+  const resultCount = resultCountByTab[activeTab](searchQuery, activeFilters)
   const hasFilters = activeFilters.length > 0 || searchQuery.length > 0
 
   const toggleFilter = (filter: string) => {
@@ -160,7 +170,11 @@ export function ResourceTabs() {
 
           <div className="mt-6 flex min-h-9 flex-wrap items-center justify-between gap-3 border-t border-deep-ocean/10 pt-5" aria-live="polite">
             <p className="text-sm text-deep-ocean/60">
-              {hasFilters ? `${activeFilters.length} filter${activeFilters.length === 1 ? "" : "s"} selected${searchQuery ? " plus search" : ""}` : "Showing all resources"}
+              <span className="font-medium text-deep-ocean">
+                {resultCount} {resultCount === 1 ? "result" : "results"}
+              </span>{" "}
+              in {activeTabConfig.label}
+              {hasFilters && ` · ${activeFilters.length} filter${activeFilters.length === 1 ? "" : "s"}${searchQuery ? " plus search" : ""}`}
             </p>
             {hasFilters && (
               <button type="button" onClick={clearAllFilters} className="inline-flex items-center gap-2 text-sm font-medium text-deep-ocean underline underline-offset-4 hover:text-primary-teal">
@@ -189,7 +203,12 @@ export function ResourceTabs() {
         </nav>
 
         <div id={activeTab}>
-          <ActiveComponent searchQuery={searchQuery} activeFilters={activeFilters} onTagClick={addFilter} />
+          <ActiveComponent
+            searchQuery={searchQuery}
+            activeFilters={activeFilters}
+            onTagClick={addFilter}
+            onClearFilters={clearAllFilters}
+          />
         </div>
       </div>
     </section>

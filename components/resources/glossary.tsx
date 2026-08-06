@@ -1,11 +1,13 @@
 import Link from "next/link"
 import { OpenNewWindow } from "iconoir-react"
+import { ResourceEmptyState } from "./resource-empty-state"
 import { matchesResourceFilters } from "./resource-filter"
 
 interface GlossaryProps {
   searchQuery?: string
   activeFilters?: string[]
   onTagClick?: (tag: string) => void
+  onClearFilters?: () => void
 }
 
 const terms = [
@@ -115,6 +117,12 @@ const terms = [
   },
 ]
 
+export function getGlossaryResultCount(searchQuery = "", activeFilters: string[] = []) {
+  return terms.filter((item) =>
+    matchesResourceFilters(`${item.term} ${item.definition}`, ["Guides", item.category], searchQuery, activeFilters),
+  ).length
+}
+
 const categoryColors: Record<string, { bg: string; text: string }> = {
   Certification: { bg: "bg-primary-teal/20", text: "text-primary-teal" },
   Behavior: { bg: "bg-seafoam/40", text: "text-deep-ocean" },
@@ -124,7 +132,7 @@ const categoryColors: Record<string, { bg: string; text: string }> = {
   "Core Concept": { bg: "bg-seafoam", text: "text-deep-ocean" },
 }
 
-export function Glossary({ searchQuery = "", activeFilters = [], onTagClick }: GlossaryProps) {
+export function Glossary({ searchQuery = "", activeFilters = [], onTagClick, onClearFilters }: GlossaryProps) {
   const handleCategoryClick = (e: React.MouseEvent, category: string) => {
     e.preventDefault()
     e.stopPropagation()
@@ -147,14 +155,10 @@ export function Glossary({ searchQuery = "", activeFilters = [], onTagClick }: G
       </div>
 
       {filteredTerms.length === 0 && (
-        <div
-          className="border border-deep-ocean/10 bg-white px-6 py-12 text-center"
-          style={{ borderRadius: "40px 10px 40px 40px" }}
-        >
-          <p className="text-deep-ocean/60" style={{ fontFamily: "var(--font-geom)" }}>
-            No terms match your search or filters. Try adjusting them or clearing all filters.
-          </p>
-        </div>
+        <ResourceEmptyState
+          description="No terms match your search or filters. Try a broader search or reset the controls."
+          onClearFilters={onClearFilters}
+        />
       )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -1,10 +1,12 @@
 import { OpenNewWindow } from "iconoir-react"
+import { ResourceEmptyState } from "./resource-empty-state"
 import { matchesResourceFilters } from "./resource-filter"
 
 interface CaseStudiesProps {
   searchQuery?: string
   activeFilters?: string[]
   onTagClick?: (tag: string) => void
+  onClearFilters?: () => void
 }
 
 const caseStudies = [
@@ -50,7 +52,18 @@ const caseStudies = [
   },
 ]
 
-export function CaseStudies({ searchQuery = "", activeFilters = [], onTagClick }: CaseStudiesProps) {
+export function getCaseStudiesResultCount(searchQuery = "", activeFilters: string[] = []) {
+  return caseStudies.filter((study) =>
+    matchesResourceFilters(
+      `${study.company} ${study.tagline} ${study.description} ${study.highlights.join(" ")}`,
+      study.tags,
+      searchQuery,
+      activeFilters,
+    ),
+  ).length
+}
+
+export function CaseStudies({ searchQuery = "", activeFilters = [], onTagClick, onClearFilters }: CaseStudiesProps) {
   const handleTagClick = (e: React.MouseEvent, tag: string) => {
     e.preventDefault()
     e.stopPropagation()
@@ -78,14 +91,10 @@ export function CaseStudies({ searchQuery = "", activeFilters = [], onTagClick }
       </div>
 
       {filteredStudies.length === 0 && (
-        <div
-          className="border border-deep-ocean/10 bg-white px-6 py-12 text-center"
-          style={{ borderRadius: "40px 10px 40px 40px" }}
-        >
-          <p className="text-deep-ocean/60" style={{ fontFamily: "var(--font-geom)" }}>
-            No case studies match your search or filters. Try adjusting them or clearing all filters.
-          </p>
-        </div>
+        <ResourceEmptyState
+          description="No case studies match your search or filters. Try a broader search or reset the controls."
+          onClearFilters={onClearFilters}
+        />
       )}
 
       <div className="space-y-6">

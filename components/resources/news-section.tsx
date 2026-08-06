@@ -1,12 +1,14 @@
 "use client"
 
 import { AnimateOnScroll } from "@/components/animate-on-scroll"
+import { ResourceEmptyState } from "./resource-empty-state"
 import { matchesResourceFilters } from "./resource-filter"
 
 interface NewsSectionProps {
   searchQuery?: string
   activeFilters?: string[]
   onTagClick?: (tag: string) => void
+  onClearFilters?: () => void
 }
 
 const newsItems = [
@@ -41,7 +43,13 @@ const newsItems = [
   },
 ]
 
-export function NewsSection({ searchQuery = "", activeFilters = [], onTagClick }: NewsSectionProps) {
+export function getNewsResultCount(searchQuery = "", activeFilters: string[] = []) {
+  return newsItems.filter((item) =>
+    matchesResourceFilters(`${item.title} ${item.description}`, item.tags, searchQuery, activeFilters),
+  ).length
+}
+
+export function NewsSection({ searchQuery = "", activeFilters = [], onTagClick, onClearFilters }: NewsSectionProps) {
   const handleTagClick = (e: React.MouseEvent, tag: string) => {
     e.preventDefault()
     e.stopPropagation()
@@ -69,14 +77,10 @@ export function NewsSection({ searchQuery = "", activeFilters = [], onTagClick }
       </AnimateOnScroll>
 
       {filteredItems.length === 0 && (
-        <div
-          className="border border-deep-ocean/10 bg-white/60 px-6 py-12 text-center"
-          style={{ borderRadius: "40px 10px 40px 40px" }}
-        >
-          <p className="text-deep-ocean/60" style={{ fontFamily: "var(--font-geom)" }}>
-            No news items match your search or filters. Try adjusting them or clearing all filters.
-          </p>
-        </div>
+        <ResourceEmptyState
+          description="No news items match your search or filters. Try a broader search or reset the controls."
+          onClearFilters={onClearFilters}
+        />
       )}
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">

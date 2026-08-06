@@ -1,10 +1,12 @@
 import { OpenNewWindow } from "iconoir-react"
+import { ResourceEmptyState } from "./resource-empty-state"
 import { matchesResourceFilters } from "./resource-filter"
 
 interface BestPracticesProps {
   searchQuery?: string
   activeFilters?: string[]
   onTagClick?: (tag: string) => void
+  onClearFilters?: () => void
 }
 
 interface PracticeItem {
@@ -78,7 +80,18 @@ const categories: PracticeCategory[] = [
   },
 ]
 
-export function BestPractices({ searchQuery = "", activeFilters = [], onTagClick }: BestPracticesProps) {
+export function getBestPracticesResultCount(searchQuery = "", activeFilters: string[] = []) {
+  return categories.reduce(
+    (total, category) =>
+      total +
+      category.items.filter((item) =>
+        matchesResourceFilters(`${item.title} ${item.description}`, item.tags, searchQuery, activeFilters),
+      ).length,
+    0,
+  )
+}
+
+export function BestPractices({ searchQuery = "", activeFilters = [], onTagClick, onClearFilters }: BestPracticesProps) {
   const handleTagClick = (e: React.MouseEvent, tag: string) => {
     e.preventDefault()
     e.stopPropagation()
@@ -106,14 +119,10 @@ export function BestPractices({ searchQuery = "", activeFilters = [], onTagClick
       </div>
 
       {filteredCategories.length === 0 && (
-        <div
-          className="border border-deep-ocean/10 bg-white px-6 py-12 text-center"
-          style={{ borderRadius: "40px 10px 40px 40px" }}
-        >
-          <p className="text-deep-ocean/60" style={{ fontFamily: "var(--font-geom)" }}>
-            No research or best practices match your search or filters. Try adjusting them or clearing all filters.
-          </p>
-        </div>
+        <ResourceEmptyState
+          description="No research or best practices match your search or filters. Try a broader search or reset the controls."
+          onClearFilters={onClearFilters}
+        />
       )}
 
       <div className="space-y-10">
