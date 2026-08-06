@@ -17,7 +17,7 @@ const categories = [
           "Sustainability jumped from 9th to 4th for 2026 in a list of emerging trends receiving leadership attention.",
         link: "https://www.deloitte.com/us/en/insights/topics/leadership/building-organizational-resilience.html",
         source: "Deloitte Global Board and C-suite Resilience Survey",
-        tags: ["Leadership", "Trends"],
+        tags: ["Articles", "Leadership", "Trends"],
       },
     ],
   },
@@ -28,7 +28,7 @@ const categories = [
         title: "Green Jobs Growth",
         description: "Green jobs are growing, with a hiring rate 47% higher than jobs overall.",
         link: "https://www.linkedin.com/feed/update/urn:li:activity:7394822117692903424/",
-        tags: ["Green Jobs", "Skills"],
+        tags: ["Articles", "Green Jobs", "Skills"],
       },
     ],
   },
@@ -40,14 +40,14 @@ const categories = [
         description:
           "B The Change provides 5 tips for organizations on how to communicate effectively in times of uncertainty.",
         link: "https://bthechange.com/the-navigating-chaos-toolkit-fcacbaaae1e9",
-        tags: ["Crisis Communications", "Nudges"],
+        tags: ["Guides", "Crisis Communications", "Nudges"],
       },
       {
         title: "Green Nudges",
         description:
           'Nudges can be most effective in driving action. Examples of "green nudges" can be found here.',
         link: "https://www.green-nudges.com/",
-        tags: ["Behavior Change", "Marketing"],
+        tags: ["Guides", "Behavior Change", "Marketing"],
       },
     ],
   },
@@ -59,7 +59,7 @@ const categories = [
         description:
           "Prosci offers 8 tips for effectively managing sustainability changes, including: Walk the talk, Communicate the 'Why', and Start small and think long-term.",
         link: "https://www.prosci.com/blog/change-management-for-sustainability",
-        tags: ["Change Management", "Leadership"],
+        tags: ["Articles", "Change Management", "Leadership"],
       },
     ],
   },

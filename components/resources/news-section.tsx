@@ -16,7 +16,7 @@ const newsItems = [
     description:
       "Sound environmental policy and legislation are key to sustainability. California's climate disclosure law faces new challenges.",
     link: "https://www.esgdive.com/news/ninth-circuit-court-halts-implementation-of-california-climate-law-sb-261/805848/",
-    tags: ["Policy", "Regulation"],
+    tags: ["Articles", "Policy", "Regulation"],
     image: "/california-state-building-government-policy.jpg",
     featured: false,
   },
@@ -25,7 +25,7 @@ const newsItems = [
     title: "Motors That Don't Rely on Chinese Rare Earths",
     description: "The electricity transition's dependency on rare earths could change with new motor technology.",
     link: "https://spectrum.ieee.org/ev-motor",
-    tags: ["EV", "Innovation"],
+    tags: ["Articles", "EV", "Innovation"],
     image: "/electric-vehicle-motor-technology-green.jpg",
     featured: false,
   },
@@ -35,7 +35,7 @@ const newsItems = [
     description:
       "Climate Leader Katherine Hayhoe shares insights on how every business decision impacts our climate future and why sustainability matters now more than ever.",
     link: "https://www.reblueventures.com/blog/interview-with-katharine-hayhoe",
-    tags: ["Podcast", "Leadership"],
+    tags: ["Podcasts", "Climate Action", "Leadership"],
     image: "/climate-leader-speaking-sustainability-conference.jpg",
     featured: true,
   },

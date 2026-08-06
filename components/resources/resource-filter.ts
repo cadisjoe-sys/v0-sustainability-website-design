@@ -1,28 +1,60 @@
-// Shared matching logic for the Resource Hub search + filter chips.
-//
-// An item is shown when it matches the free-text search (if any) AND
-// matches at least one active filter chip (if any are selected).
-//
-// - `searchText` is the combined searchable text for an item (title, description, etc.)
-//   and is matched loosely via substring so search stays forgiving.
-// - `tags` are the item's explicit tags/categories and are matched against the
-//   active filter chips using exact (case-insensitive) equality. This prevents
-//   false positives like the "EV" chip matching the word "every".
+const filterGroups = {
+  contentType: ["Articles", "Guides", "Podcasts", "Reports", "Videos"],
+  topics: [
+    "Carbon",
+    "Circular Economy",
+    "Climate Action",
+    "Climate Justice",
+    "Electrification",
+    "ESG Reporting",
+    "EV",
+    "Food Systems",
+    "Forest Management",
+    "Innovation",
+    "Policy",
+    "Regulation",
+    "Renewable Energy",
+    "Supply Chain",
+    "Waste",
+  ],
+  industries: [
+    "Agriculture",
+    "Consumer Products",
+    "Energy",
+    "Finance",
+    "Green Buildings",
+    "Healthcare",
+    "Manufacturing",
+    "Plastics",
+    "Retail",
+    "Technology",
+    "Textiles & Fashion",
+  ],
+}
+
+const normalizedGroups = Object.values(filterGroups).map((group) => group.map((value) => value.toLowerCase()))
+
 export function matchesResourceFilters(
   searchText: string,
   tags: string[],
   searchQuery: string,
   activeFilters: string[],
 ): boolean {
+  const normalizedTags = tags.map((tag) => tag.toLowerCase())
   const haystack = `${searchText} ${tags.join(" ")}`.toLowerCase()
-  const normalizedTags = tags.map((t) => t.toLowerCase())
+  const query = searchQuery.trim().toLowerCase()
 
-  const matchesSearch = !searchQuery || haystack.includes(searchQuery.toLowerCase())
+  if (query && !haystack.includes(query)) return false
+  if (!activeFilters.length) return true
 
-  const matchesFilters =
-    !activeFilters ||
-    activeFilters.length === 0 ||
-    activeFilters.some((f) => normalizedTags.includes(f.toLowerCase()))
+  const normalizedFilters = activeFilters.map((filter) => filter.toLowerCase())
+  const groupedMatches = normalizedGroups.every((group) => {
+    const selectedInGroup = normalizedFilters.filter((filter) => group.includes(filter))
+    return selectedInGroup.length === 0 || selectedInGroup.some((filter) => normalizedTags.includes(filter))
+  })
+  const knownFilters = new Set(normalizedGroups.flat())
+  const selectedOther = normalizedFilters.filter((filter) => !knownFilters.has(filter))
+  const otherMatches = selectedOther.length === 0 || selectedOther.some((filter) => normalizedTags.includes(filter))
 
-  return matchesSearch && matchesFilters
+  return groupedMatches && otherMatches
 }

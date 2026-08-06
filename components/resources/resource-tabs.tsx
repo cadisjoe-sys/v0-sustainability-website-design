@@ -1,11 +1,11 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { NewsSection } from "./news-section"
-import { CaseStudies } from "./case-studies"
-import { BestPractices } from "./best-practices"
-import { Glossary } from "./glossary"
+import { useEffect, useState } from "react"
 import { Search, X } from "lucide-react"
+import { BestPractices } from "./best-practices"
+import { CaseStudies } from "./case-studies"
+import { Glossary } from "./glossary"
+import { NewsSection } from "./news-section"
 
 type TabComponent = React.ComponentType<{
   searchQuery?: string
@@ -20,12 +20,15 @@ const tabs: { id: string; label: string; component: TabComponent }[] = [
   { id: "glossary", label: "Sustainability Concepts & Terms", component: Glossary },
 ]
 
-const validTabIds = tabs.map((t) => t.id)
-
-const filterCategories = [
+const filterGroups = [
+  {
+    id: "content-type",
+    label: "Content type",
+    options: ["Articles", "Guides", "Podcasts", "Reports", "Videos"],
+  },
   {
     id: "topics",
-    label: "Topics",
+    label: "Topic",
     options: [
       "Carbon",
       "Circular Economy",
@@ -46,7 +49,7 @@ const filterCategories = [
   },
   {
     id: "industries",
-    label: "Industries",
+    label: "Industry",
     options: [
       "Agriculture",
       "Consumer Products",
@@ -61,44 +64,38 @@ const filterCategories = [
       "Textiles & Fashion",
     ],
   },
-  {
-    id: "content-type",
-    label: "Content Type",
-    options: ["Articles", "Blogs", "Guides", "Podcasts", "Reports", "Videos"],
-  },
 ]
+
+const validTabIds = tabs.map((tab) => tab.id)
 
 export function ResourceTabs() {
   const [activeTab, setActiveTab] = useState("news")
   const [searchQuery, setSearchQuery] = useState("")
   const [activeFilters, setActiveFilters] = useState<string[]>([])
-  const [expandedCategory, setExpandedCategory] = useState<string | null>(null)
 
-  // Open the tab referenced by the URL hash (e.g. /resources#case-studies)
   useEffect(() => {
     const applyHash = () => {
       const hash = window.location.hash.replace("#", "")
-      if (validTabIds.includes(hash)) {
-        setActiveTab(hash)
-      }
+      if (validTabIds.includes(hash)) setActiveTab(hash)
     }
+
     applyHash()
     window.addEventListener("hashchange", applyHash)
     return () => window.removeEventListener("hashchange", applyHash)
   }, [])
 
-  const ActiveComponent = tabs.find((t) => t.id === activeTab)?.component || NewsSection
+  const ActiveComponent = tabs.find((tab) => tab.id === activeTab)?.component ?? NewsSection
+  const hasFilters = activeFilters.length > 0 || searchQuery.length > 0
 
   const toggleFilter = (filter: string) => {
-    setActiveFilters((prev) => (prev.includes(filter) ? prev.filter((f) => f !== filter) : [...prev, filter]))
+    setActiveFilters((current) =>
+      current.includes(filter) ? current.filter((item) => item !== filter) : [...current, filter],
+    )
   }
 
-  // Clicking a tag on a card adds it as an active filter (without removing it if clicked again)
   const addFilter = (filter: string) => {
-    setActiveFilters((prev) => (prev.includes(filter) ? prev : [...prev, filter]))
-    if (typeof window !== "undefined") {
-      window.scrollTo({ top: 0, behavior: "smooth" })
-    }
+    setActiveFilters((current) => (current.includes(filter) ? current : [...current, filter]))
+    document.getElementById("resource-filters")?.scrollIntoView({ behavior: "smooth", block: "start" })
   }
 
   const clearAllFilters = () => {
@@ -107,167 +104,90 @@ export function ResourceTabs() {
   }
 
   return (
-    <section className="py-20 lg:py-28 bg-mist relative overflow-hidden">
-      {/* Decorative Style-M shapes */}
-      <div
-        className="absolute top-40 -right-20 w-64 h-64 bg-seafoam/30 blur-3xl"
-        style={{ borderRadius: "50px 10px 50px 50px" }}
-        aria-hidden="true"
-      />
-      <div
-        className="absolute bottom-40 -left-20 w-48 h-48 bg-primary-teal/20 blur-3xl"
-        style={{ borderRadius: "50px 10px 50px 50px" }}
-        aria-hidden="true"
-      />
-
+    <section className="relative overflow-hidden bg-mist py-20 lg:py-28">
       <div className="relative mx-auto max-w-[1400px] px-6 lg:px-12">
-        {/* Header with label */}
         <div className="mb-8">
-          <p className="text-xs text-deep-ocean/60 tracking-widest mb-3" style={{ fontFamily: "var(--font-geom)" }}>
+          <p className="mb-3 text-xs tracking-widest text-deep-ocean/60" style={{ fontFamily: "var(--font-geom)" }}>
             Explore Resources
           </p>
-          <div className="w-16 h-px bg-deep-ocean/30" />
+          <div className="h-px w-16 bg-deep-ocean/30" />
         </div>
 
-        {/* Search and Filter Bar */}
-        <div className="mb-8">
-          {/* Search Input */}
-          <div className="relative mb-6">
-            <div
-              className="flex items-center bg-white/80 backdrop-blur-sm border border-deep-ocean/10 overflow-hidden"
-              style={{ borderRadius: "50px 10px 50px 50px" }}
-            >
-              <div className="pl-5 pr-3 text-deep-ocean/40">
-                <Search className="w-5 h-5" />
-              </div>
-              <input
-                type="text"
-                placeholder="Search resources..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="flex-1 py-4 pr-5 bg-transparent text-deep-ocean placeholder:text-deep-ocean/40 focus:outline-none"
-                style={{ fontFamily: "var(--font-geom)" }}
-              />
-              {searchQuery && (
-                <button
-                  onClick={() => setSearchQuery("")}
-                  className="pr-5 text-deep-ocean/40 hover:text-deep-ocean transition-colors"
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              )}
-            </div>
+        <div id="resource-filters" className="scroll-mt-28 rounded-[40px_10px_40px_40px] border border-deep-ocean/10 bg-white/70 p-5 backdrop-blur-sm lg:p-7">
+          <label htmlFor="resource-search" className="mb-2 block text-sm font-medium text-deep-ocean">
+            Search the Resource Hub
+          </label>
+          <div className="flex items-center rounded-[50px_10px_50px_50px] border border-deep-ocean/15 bg-white">
+            <Search className="ml-5 size-5 text-deep-ocean/40" aria-hidden="true" />
+            <input
+              id="resource-search"
+              type="search"
+              placeholder="Search titles, topics, and descriptions"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              className="min-w-0 flex-1 bg-transparent px-3 py-4 text-deep-ocean outline-none placeholder:text-deep-ocean/40"
+            />
+            {searchQuery && (
+              <button type="button" onClick={() => setSearchQuery("")} className="mr-4 rounded-full p-2 text-deep-ocean/50 hover:bg-mist hover:text-deep-ocean" aria-label="Clear search">
+                <X className="size-4" />
+              </button>
+            )}
           </div>
 
-          {/* Filter Categories */}
-          <div className="flex flex-wrap gap-3 mb-4">
-            {filterCategories.map((category) => (
-              <div key={category.id} className="relative">
-                <button
-                  onClick={() => setExpandedCategory(expandedCategory === category.id ? null : category.id)}
-                  className={`px-4 py-2 text-sm border transition-all flex items-center gap-2 ${
-                    expandedCategory === category.id || activeFilters.some((f) => category.options.includes(f))
-                      ? "bg-deep-ocean text-seafoam border-deep-ocean"
-                      : "bg-white/60 text-deep-ocean border-deep-ocean/10 hover:bg-white"
-                  }`}
-                  style={{
-                    fontFamily: "var(--font-geom)",
-                    borderRadius: "50px 10px 50px 50px",
-                  }}
-                >
-                  {category.label}
-                  <svg
-                    className={`w-4 h-4 transition-transform ${expandedCategory === category.id ? "rotate-180" : ""}`}
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                  </svg>
-                </button>
-
-                {/* Dropdown */}
-                {expandedCategory === category.id && (
-                  <div
-                    className="absolute top-full left-0 mt-2 p-3 bg-white shadow-lg border border-deep-ocean/10 z-20 min-w-[200px]"
-                    style={{ borderRadius: "20px 10px 20px 20px" }}
-                  >
-                    <div className="flex flex-wrap gap-2">
-                      {category.options.map((option) => (
-                        <button
-                          key={option}
-                          onClick={() => toggleFilter(option)}
-                          className={`px-3 py-1.5 text-xs transition-all ${
-                            activeFilters.includes(option)
-                              ? "bg-seafoam text-deep-ocean"
-                              : "bg-mist text-deep-ocean/70 hover:bg-seafoam/30"
-                          }`}
-                          style={{
-                            fontFamily: "var(--font-geom)",
-                            borderRadius: "30px 8px 30px 30px",
-                          }}
-                        >
-                          {option}
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-              </div>
+          <div className="mt-7 flex flex-col gap-6">
+            {filterGroups.map((group) => (
+              <fieldset key={group.id} className="flex flex-col gap-3">
+                <legend className="text-sm font-medium text-deep-ocean">{group.label}</legend>
+                <div className="flex flex-wrap gap-2">
+                  {group.options.map((option) => {
+                    const selected = activeFilters.includes(option)
+                    return (
+                      <button
+                        key={option}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => toggleFilter(option)}
+                        className={`rounded-[30px_8px_30px_30px] border px-3 py-2 text-sm transition-colors ${selected ? "border-deep-ocean bg-deep-ocean text-seafoam" : "border-deep-ocean/15 bg-mist text-deep-ocean hover:border-primary-teal"}`}
+                      >
+                        {option}
+                      </button>
+                    )
+                  })}
+                </div>
+              </fieldset>
             ))}
           </div>
 
-          {/* Active Filters Display */}
-          {activeFilters.length > 0 && (
-            <div className="flex flex-wrap items-center gap-2 pt-2">
-              <span className="text-xs text-deep-ocean/50" style={{ fontFamily: "var(--font-geom)" }}>
-                Active filters:
-              </span>
-              {activeFilters.map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => toggleFilter(filter)}
-                  className="px-3 py-1 text-xs bg-seafoam text-deep-ocean flex items-center gap-1.5 hover:bg-seafoam/80 transition-colors"
-                  style={{
-                    fontFamily: "var(--font-geom)",
-                    borderRadius: "30px 8px 30px 30px",
-                  }}
-                >
-                  {filter}
-                  <X className="w-3 h-3" />
-                </button>
-              ))}
-              <button
-                onClick={clearAllFilters}
-                className="text-xs text-deep-ocean/50 hover:text-deep-ocean underline transition-colors ml-2"
-                style={{ fontFamily: "var(--font-geom)" }}
-              >
-                Clear all
+          <div className="mt-6 flex min-h-9 flex-wrap items-center justify-between gap-3 border-t border-deep-ocean/10 pt-5" aria-live="polite">
+            <p className="text-sm text-deep-ocean/60">
+              {hasFilters ? `${activeFilters.length} filter${activeFilters.length === 1 ? "" : "s"} selected${searchQuery ? " plus search" : ""}` : "Showing all resources"}
+            </p>
+            {hasFilters && (
+              <button type="button" onClick={clearAllFilters} className="inline-flex items-center gap-2 text-sm font-medium text-deep-ocean underline underline-offset-4 hover:text-primary-teal">
+                <X className="size-4" aria-hidden="true" />
+                Clear filters
               </button>
-            </div>
-          )}
+            )}
+          </div>
         </div>
 
-        {/* Tab Navigation */}
-        <nav className="flex flex-wrap gap-3 mb-12 pt-4 border-t border-deep-ocean/10">
+        <nav aria-label="Resource sections" className="mb-12 mt-8 flex flex-wrap gap-3 border-t border-deep-ocean/10 pt-6">
           {tabs.map((tab) => (
             <button
               key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-2.5 text-sm transition-all ${
-                activeTab === tab.id ? "bg-deep-ocean text-seafoam" : "bg-white/60 text-deep-ocean hover:bg-white"
-              }`}
-              style={{
-                fontFamily: "var(--font-geom)",
-                borderRadius: "50px 10px 50px 50px",
+              type="button"
+              onClick={() => {
+                setActiveTab(tab.id)
+                window.history.replaceState(null, "", `#${tab.id}`)
               }}
+              aria-pressed={activeTab === tab.id}
+              className={`rounded-[50px_10px_50px_50px] px-5 py-2.5 text-sm transition-colors ${activeTab === tab.id ? "bg-deep-ocean text-seafoam" : "bg-white/60 text-deep-ocean hover:bg-white"}`}
             >
               {tab.label}
             </button>
           ))}
         </nav>
 
-        {/* Tab Content */}
         <div id={activeTab}>
           <ActiveComponent searchQuery={searchQuery} activeFilters={activeFilters} onTagClick={addFilter} />
         </div>

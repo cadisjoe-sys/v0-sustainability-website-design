@@ -2,6 +2,7 @@ import { Header } from "@/components/header"
 import { Footer } from "@/components/footer"
 import { ServicesHero } from "@/components/services/services-hero"
 import { ServiceCategories } from "@/components/services/service-categories"
+import { ServiceFinder } from "@/components/services/service-finder"
 import { ServicesCTA } from "@/components/services/services-cta"
 import type { Metadata } from "next"
 
@@ -17,6 +18,7 @@ export default function ServicesPage() {
       <Header />
       <main className="flex-1">
         <ServicesHero />
+        <ServiceFinder />
         <ServiceCategories />
         <ServicesCTA />
       </main>

@@ -1,5 +1,6 @@
 "use client"
 
+import Image from "next/image"
 import Link from "next/link"
 import { useState, useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
@@ -20,10 +21,11 @@ const dropdownData = {
 }
 
 const navigationData = [
-  { name: "Services", href: "/services", number: "01", hasDropdown: true, dropdownKey: "services" },
-  { name: "Benefits", href: "/benefits", number: "02" },
-  { name: "Resources", href: "/resources", number: "03" },
-  { name: "Who We Are", href: "/about", number: "04" },
+  { name: "Home", href: "/", number: "01" },
+  { name: "Services", href: "/services", number: "02", hasDropdown: true, dropdownKey: "services" },
+  { name: "Benefits", href: "/benefits", number: "03" },
+  { name: "Resources", href: "/resources", number: "04" },
+  { name: "Who We Are", href: "/about", number: "05" },
 ]
 
 export function Header() {
@@ -365,6 +367,8 @@ export function Header() {
                 <button
                   className="w-full flex items-center justify-between text-left text-white text-lg font-medium py-3 border-b border-white/10"
                   onClick={() => setMobileExpandedSection(mobileExpandedSection === "services" ? null : "services")}
+                  aria-expanded={mobileExpandedSection === "services"}
+                  aria-controls="mobile-services-list"
                 >
                   Services
                   <div
@@ -409,6 +413,7 @@ export function Header() {
 
               <div className="grid grid-cols-2 md:grid-cols-3 gap-3 pt-2">
                 {[
+                  { name: "Home", href: "/" },
                   { name: "Benefits", href: "/benefits" },
                   { name: "Resources", href: "/resources" },
                   { name: "Who We Are", href: "/about" },
@@ -525,6 +530,7 @@ export function Header() {
               </button>
 
               <div
+                id="mobile-services-list"
                 className="overflow-hidden"
                 style={{
                   maxHeight: mobileExpandedSection === "services" ? "400px" : "0",
@@ -566,6 +572,7 @@ export function Header() {
             </div>
 
             {[
+              { name: "Home", href: "/", delay: 25 },
               { name: "Benefits", href: "/benefits", delay: 50 },
               { name: "Resources", href: "/resources", delay: 100 },
               { name: "Who We Are", href: "/about", delay: 150 },
