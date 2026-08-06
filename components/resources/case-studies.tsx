@@ -19,7 +19,7 @@ const caseStudies = [
       "60% of 2024 sales came from socially or environmentally responsible products",
       "Diverted over 70mm pounds of food from landfill in 2024",
     ],
-    tags: ["Retail", "ESG Reporting", "Food Systems", "Waste"],
+    tags: ["Reports", "Retail", "ESG Reporting", "Food Systems", "Waste"],
     impactReportLink: "https://www.sprouts.com/wp-content/uploads/2025/05/Sprouts-Impact-Report-2024_R.pdf",
   },
   {
@@ -33,7 +33,7 @@ const caseStudies = [
       'Donated over $150 million to environmental groups through "1% for the Planet"',
       "Founding member of the Regenerative Organic Alliance",
     ],
-    tags: ["Consumer Products", "Textiles & Fashion", "ESG Reporting", "Circular Economy"],
+    tags: ["Reports", "Consumer Products", "Textiles & Fashion", "ESG Reporting", "Circular Economy"],
   },
   {
     company: "Living Pastures Farm",
@@ -46,7 +46,7 @@ const caseStudies = [
       "Lower greenhouse gas emissions, better water retention, and increased biodiversity",
       "Premium pricing and more customers with in-demand, nutrient-dense products",
     ],
-    tags: ["Agriculture", "Food Systems", "Carbon"],
+    tags: ["Reports", "Agriculture", "Food Systems", "Carbon"],
   },
 ]
 

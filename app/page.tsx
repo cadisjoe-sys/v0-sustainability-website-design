@@ -3,6 +3,7 @@ import { Footer } from "@/components/footer"
 import { HeroSection } from "@/components/home/hero-section"
 import { IntroSection } from "@/components/home/intro-section"
 import { QuoteSection } from "@/components/home/quote-section"
+import { PinaultQuote } from "@/components/home/pinault-quote"
 import { ServicesPreview } from "@/components/home/services-preview"
 import { FundamentalsSection } from "@/components/home/fundamentals-section"
 import { ResourceHubPreview } from "@/components/home/resource-hub-preview"
@@ -20,6 +21,7 @@ export default function HomePage() {
         <QuoteSection />
         {/* 4. Services preview */}
         <ServicesPreview />
+        <PinaultQuote />
         {/* 5. How we work / Our Approach */}
         <FundamentalsSection />
         {/* 6. Resource Hub preview */}

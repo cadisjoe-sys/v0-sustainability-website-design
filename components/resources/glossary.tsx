@@ -132,7 +132,7 @@ export function Glossary({ searchQuery = "", activeFilters = [], onTagClick }: G
   }
 
   const filteredTerms = terms.filter((item) =>
-    matchesResourceFilters(`${item.term} ${item.definition}`, [item.category], searchQuery, activeFilters),
+    matchesResourceFilters(`${item.term} ${item.definition}`, ["Guides", item.category], searchQuery, activeFilters),
   )
 
   return (
